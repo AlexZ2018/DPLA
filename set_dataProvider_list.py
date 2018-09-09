@@ -1,15 +1,23 @@
 '''
+set_dataProvider_list.py
+'''
 import sys
 import dpla_utils
-#import get_provider_list
-#import set_provider_list
+import getopt, dpla_config
 import csv
 def set_dataProvider_list():
-        api_key = "00cab391260d2c1862c8673dd5651a53"
+        api_key = dpla_config.API_KEY
         #set_provider_list.set_provider_list()
         #csv_reader = csv.reader(open('files/provider_list.csv'))
+        opts, args = getopt.getopt(sys.argv[1:], "hi:o:")
+        output_file, input_file = "",""
+        for op, value in opts:
+                if op == "-o":
+                        output_file = value
+                elif op == "-i":
+                        input_file = value
         try:
-                csv_reader = csv.reader(open(sys.argv[1]))
+                csv_reader = csv.reader(open(input_file))
                 header = True
                 count = 0
                 for row in csv_reader:
@@ -25,24 +33,32 @@ def set_dataProvider_list():
                                 sub_dict = response['dataProvider']
                                 dataprovider_result_list = sub_dict['terms']
                                 count += len(dataprovider_result_list)
-
-                                with open('files/' + current_provider + '_dataProvider_list.csv', 'w') as file_open:
-                                        header = ['term', 'count']
-                                        writer = csv.DictWriter(file_open, header)
-                                        writer.writeheader()
-                                        writer.writerows(dataprovider_result_list)
+                                #with open(output_file + current_provider + '.csv', 'w')
+                                try:
+                                        with open(output_file + current_provider + '.csv', 'w') as file_open:
+                                                header = ['term', 'count']
+                                                writer = csv.DictWriter(file_open, header)
+                                                writer.writeheader()
+                                                writer.writerows(dataprovider_result_list)
                                         #header = ['dataProvider.name', 'count']
                                         #writer.writeheader()
 
-                                with open('files/' + current_provider + '_dataProvider_list.csv') as file1:
-                                        f_csv = csv.DictReader(file1)
-                                        for index, row in enumerate(f_csv):
-                                                key = 'provider'
-                                                value = 'current_provider'
-                                                row[key] = value
+                                        with open(output_file + current_provider + '.csv') as file1:
+                                                f_csv = csv.DictReader(file1)
+                                                for index, row in enumerate(f_csv):
+                                                        key = 'provider'
+                                                        value = 'current_provider'
+                                                        row[key] = value
+
+                                        #print("There are " + str(count) + " dataProviders contribute data for DPLA")
+                                except IOError as f:
+                                        print("please enter a valid output_file")
+                                        sys.exit()
                 print("There are " + str(count) + " dataProviders contribute data for DPLA")
 
         except IOError as e:
-                print("Please enter a valid file name. ")
+                print("Please enter a valid input file name. ")
                 #logging.exception(e)
 set_dataProvider_list()
+
+
