@@ -3,11 +3,11 @@ set_provider_list.py
 This fuction is used for getting all the providers in DPLA with the format {id, name, count}
 '''
 import dpla_utils
-import sys, getopt
+import sys, getopt, dpla_config
 import csv
 
 def get_pvd():
-        api_key = "00cab391260d2c1862c8673dd5651a53"
+        api_key = dpla_config.API_KEY
         condi = {'facets': 'provider'}
         _dict = dpla_utils.dpla_fetch_facets_remote(api_key,"items",  **condi)
         result_list = []
@@ -34,7 +34,7 @@ def get_pvd():
         return result_list
 
 def set_provider_list():
-        
+
         opts, args = getopt.getopt(sys.argv[1:], "ho:")
         output_file = ""
         for op, value in opts:
@@ -52,7 +52,7 @@ def set_provider_list():
                         writer = csv.DictWriter(file_open, file_header)
                         writer.writeheader()
                         writer.writerows(provider_list)
-       
+
                         print("List of providers has been successfully written to files as provider_list.csv")
                         print("The amount of Providers: " + str(len(provider_list)))
         except IOError as e:
