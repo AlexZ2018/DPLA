@@ -1,0 +1,40 @@
+Interface
+python3 set_provider_list.py -o CSV
+
+
+Switch
+Argument
+Description
+-o
+path to CSV file
+path to CSV file to output results
+
+
+Input
+
+take a CSV as output file of provider list
+
+Behavior and implementation
+
+Read output file name from command line
+Set the query for DPLA to retrieve providers as facets 
+Process the result of returned from the DPLA request, extracting the faceted field
+For each provider in the facets,
+3.1. get provider.@id dictionary
+3.2. get provider.name dictionary
+3.3 From provider.@id dictionary, insert the fields and values of count and provider.@id in a new dictionary
+3.4 append the new dictionary to a list
+3.5 from provider.name dictionary, insert the values of the field provider.name in the corresponding dictionary 
+4. Open output CSV file
+5. set the CSV header
+6. Write the dictionaries in the list into CSV file
+
+Output
+Filename: provider_list.csv
+CSV file containing header on line 1:
+provider.name, provider.@id, count
+<provider name>, <number of items>
+Tests
+Run the script with valid output file -- Script can run successfully
+Run the script with invalid output file -- Script would throw an error and exit
+Run the script without a file name -- Script would throw an error and exit
