@@ -19,6 +19,7 @@ Behavior and implementation
 Read output file name from command line
 Set the query for DPLA to retrieve providers as facets 
 Process the result of returned from the DPLA request, extracting the faceted field
+Open the output file, if it is invalid, throw an error and exit
 For each provider in the facets,
 3.1. get provider.@id dictionary
 3.2. get provider.name dictionary
@@ -26,8 +27,8 @@ For each provider in the facets,
 3.4 append the new dictionary to a list
 3.5 from provider.name dictionary, insert the values of the field provider.name in the corresponding dictionary 
 4. Open output CSV file
-5. set the CSV header
-6. Write the dictionaries in the list into CSV file
+5. Write the CSV header as {provider.name, count}, count stands for count of items that corresponding provider contributes.
+6. Write the dictionaries in the list into CSV file row by row
 
 Output
 Filename: provider_list.csv
