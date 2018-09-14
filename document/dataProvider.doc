@@ -1,0 +1,41 @@
+Interface
+python3  set_dataProvider_list.py -i CSV -e FOLDER
+
+
+Switch
+Argument
+Description
+-i
+path to input csv file
+path to input csv file
+-e
+path to folder
+path to folder that stores dataProvider lists
+
+Input
+a csv file that stores provider list as input, a folder that stores output dataProvider list csvs
+Behavior and implementation
+Read the input file. If it can be read, continue. If  it`s invalid, throw an error message and exit the function.
+Open the input file and add a new column named “dataProvider_path”
+Read the input file in a loop, for each provider in the list:
+ facet dataProvider by provider name, and retrieve “dataProvider” field
+Create a new file for current provider, and set header as (provider, dataProvider, count)
+add value to the newly added column, with “FOLDER” and provider name(with escape character)
+Read previously retrieved “dataProvider” field in a loop, for each dataProvider in the loop:
+Write the current provider name in “provider” field
+Write the current dataProvider name in “dataProvider” field in the same row
+Retrieve items amount and write it in count in the same row
+       5.   csv writer closed
+
+
+Output
+One file for dataProviders. 
+Filenames: dataproviders_list.csv
+CSV file containing header on line 1:
+provider, dataProvider, count
+<provider>, <dataProvider>, <number of items>
+Tests
+Run the script with a target filename -- script should output files with the specified filenames
+Run the script with a filename that doesn`t exist -- script should output an error message
+Run the script without a target filename -- script should output an error and exit
+
