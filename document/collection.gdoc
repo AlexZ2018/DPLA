@@ -1,0 +1,47 @@
+Interface
+python3  collection_list.py -i CSV -o CSV
+
+
+Switch
+Argument
+Description
+-i
+path to input csv file
+path to csv file that stores provider list
+-o
+path to output csv file
+path to csv file that stores collection list
+
+Input
+a csv file that stores provider list as input, a csv file that stores collections as output
+Behavior and implementation
+Open the input csv file, if it`s invalid, throw and error and exit.
+Create the output csv file as collection list, if it`s invalid, throw an error and exit.
+Write the header of output file as (provider.name, dataProvider.name, collection.id, count_of_items)
+Read the input csv file in a loop, when reading each row, retrieve value of “dataProvider_path” from it.
+Read dataProvider list retrieved in previous step, if it cannot be read, throw an error and exit.
+Read dataProvider list in a loop, facet “collection.id” by each dataProvider.name.
+Read faceting result in a loop, for each collection:
+Write current provider name in the file.
+Write current dataProvider name in the file
+Write “term” in faceting result as collection.id in the file.
+Write “count” in faceting result as count_of_items in the file.
+csv writer closed.
+
+
+Output
+One file for collection. 
+Filenames: collection_list.csv
+CSV file containing header on line 1:
+provider, dataProvider, collection, count
+<provider.name>, <dataProvider.name>, <collection.id>, <count_of_items>
+Tests
+Run the script with valid input and output file names -- script should output collections in given output file
+Run the script with an invalid input and a valid output file names -- script should throw an error and exit
+Run the script with a valid input and an invalid output file names -- script should throw an error and exit
+Run the script without input but with a valid output file name -- script should throw an error
+Run the script without output but with a valid input file name -- script should throw an error
+
+
+
+
