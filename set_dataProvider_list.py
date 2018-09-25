@@ -10,26 +10,16 @@ import argparse
 def set_dataProvider_list():
         api_key = dpla_config.API_KEY
 
-        # put this in a seperate function
+        # read input file and folder
         parser = argparse.ArgumentParser()
         parser.add_argument('-i', action='append', dest = 'input_file_list')
         parser.add_argument('-e', action = 'append', dest = 'folder_list')
         results = parser.parse_args()
 
-        #input_file = results['i']
-        #print(results)
-        '''
-        opts, args = getopt.getopt(sys.argv[1:], "hi:e:")
-        folder, input_file = "",""
-        for op, value in opts:
-                if op == "-e":
-                        folder = value                
-                elif op == "-i":
-                        input_file = value
-        '''
         input_file = results.input_file_list[0]
         folder = results.folder_list[0]
         try:
+                #open input file
                 with open(input_file) as input_file:
                         provider_csv_reader = csv.reader(input_file)
                         header_boolean = True # delete
@@ -42,20 +32,19 @@ def set_dataProvider_list():
                                         header_boolean = False
                                         continue
                                 else:
+                                        #query dataProvider by faceting provider.name
                                         current_provider_name = provider_information_row[0] 
-
-                                        # comment for query and facet
-                                
                                         query_terms = {'provider.name': current_provider_name}
                                         query_terms['facets'] = 'dataProvider'
                                         dataProvider_query_response = dpla_utils.dpla_fetch_facets_remote(api_key, **query_terms)
-                                        #print(response)
+                                        
                                         dataprovider_result_list = dataProvider_query_response['dataProvider']['terms']
                                         dataProvider_count += len(dataprovider_result_list)
                                 
                                         try:
+                                                # write dataProvider information into files
                                                 with open(folder + current_provider_name + '.csv', 'w') as dataProvider_file:
-                                                        print(folder + current_provider_name + '.csv');
+                                                        #print(folder + current_provider_name + '.csv');
                                                         header = ['term', 'count'] # put in begining
                                                         dataProvider_csv_writer = csv.DictWriter(dataProvider_file, header)
                                                         dataProvider_csv_writer.writeheader()
@@ -71,4 +60,8 @@ def set_dataProvider_list():
         except IOError as input_file_error: 
                 print("couldn`t read the input file ") 
                 
-set_dataProvider_list() # main funciton # close csv
+#set_dataProvider_list() # main funciton # close csv
+def main():
+        set_dataProvider_list()
+
+main()
