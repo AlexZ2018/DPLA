@@ -34,4 +34,4 @@ def process_provider_list(provider_file):
                 provider_writer.writerows(provider_rows)
       
 
-process_provider_list()
+process_provider_list(provider_file)
