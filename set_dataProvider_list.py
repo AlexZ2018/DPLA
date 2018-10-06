@@ -48,6 +48,8 @@ def set_dataProvider_list():
                                 dataProvider_count += len(dataprovider_result_list)
 
                                 try:
+                                        # process current_provider_name
+                                        current_provider_name = current_provider_name.replace(' ', '_', 256);
                                         # write dataProvider information into files
                                         with open(folder + current_provider_name + '.csv', 'w') as dataProvider_file:
                                                 

@@ -57,7 +57,7 @@ def set_collection_list():
 
                                                 #query collections by faceting dataProvider.name
                                                 query_term = {'dataProvider': dataProvider_name}
-                                                query_term['facets'] = 'sourceResource'
+                                                query_term['facets'] = 'sourceResource.subject.@id'
                                                 print(dataProvider_name)
                                                 collection_query_response = dpla_utils.dpla_fetch_facets_remote(api_key, **query_term)
                                                 print(collection_query_response)
@@ -102,6 +102,9 @@ def process_provider_list(provider_file):
 
                 reader_row = next(provider_reader, None)
                 for provider_information in provider_reader:
+                        #process provider_information[0]
+                        provider_information[0] = provider_information[0].replace(' ', '_', 256)
+                        
                         provider_information.append('files/dataProvider/' + provider_information[0] + '.csv')
                         provider_rows.append(provider_information)
         provider_list_input.close()
