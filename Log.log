@@ -1,0 +1,32 @@
+2018-04-12 22:42:56,690 - __main__ - INFO - START === provider name: HathiTrust
+2018-04-12 22:42:57,492 - __main__ - INFO - total count:2697819
+2018-04-12 22:42:57,492 - __main__ - INFO - total pages: 5396
+2018-04-12 22:42:57,492 - __main__ - INFO - current page: 1
+2018-04-12 22:43:02,725 - __main__ - INFO - current page: 2
+2018-04-12 22:43:09,189 - __main__ - INFO - current page: 3
+2018-04-12 22:43:16,461 - __main__ - INFO - current page: 4
+2018-04-12 22:43:26,253 - __main__ - INFO - START === provider name: HathiTrust
+2018-04-12 22:43:27,391 - __main__ - INFO - total count:2697819
+2018-04-12 22:43:27,392 - __main__ - INFO - total pages: 5396
+2018-04-12 22:43:27,392 - __main__ - INFO - current page: 1
+2018-04-12 22:43:28,475 - __main__ - INFO - current page: 2
+2018-04-12 22:43:28,970 - __main__ - INFO - current page: 3
+2018-04-12 22:43:30,272 - __main__ - INFO - current page: 4
+2018-04-12 22:43:31,806 - __main__ - INFO - current page: 5
+2018-04-12 22:43:38,347 - __main__ - INFO - current page: 6
+2018-04-12 22:43:44,075 - __main__ - INFO - current page: 7
+2018-04-12 22:43:50,415 - __main__ - INFO - current page: 8
+2018-04-13 10:05:00,453 - __main__ - INFO - START === provider name: HathiTrust
+2018-04-13 10:05:01,746 - __main__ - INFO - total count:2741141
+2018-04-13 10:05:01,747 - __main__ - INFO - total pages: 5483
+2018-04-13 10:05:01,747 - __main__ - INFO - current page: 1
+2018-04-13 10:05:08,270 - __main__ - INFO - current page: 2
+2018-04-13 10:08:55,072 - __main__ - INFO - START === provider name: HathiTrust
+2018-04-13 10:08:55,288 - __main__ - INFO - total count:2741141
+2018-04-13 10:08:55,288 - __main__ - INFO - total pages: 5483
+2018-04-13 10:08:55,288 - __main__ - INFO - current page: 1
+2018-04-13 10:08:55,780 - __main__ - INFO - current page: 2
+2018-04-13 10:08:57,253 - __main__ - INFO - current page: 3
+2018-04-13 10:09:04,264 - __main__ - INFO - current page: 4
+2018-04-13 10:09:10,653 - __main__ - INFO - current page: 5
+2018-04-13 10:09:16,777 - __main__ - INFO - current page: 6
