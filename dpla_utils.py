@@ -243,10 +243,10 @@ def dpla_fetch_facets_remote(api_key, search_type='items', **kwargs):
         url = items_url
     json_dics = []
     # fetch the results
-    #print(url)
-    #print(payload)
+    print(url)
+    print(payload)
     response = send_request(url, payload)
-    #print(response)
+    print(response)
     dpla_results = response.get('facets', [])
     return dpla_results
 

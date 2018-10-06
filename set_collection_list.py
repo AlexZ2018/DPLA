@@ -44,7 +44,7 @@ def set_collection_list():
                                 dataProvider_file_path = provider_information_row[2]# 2 or 3???
 
                                 #open dataProvider file
-                                #print(dataProvider_file_path)
+                                print(dataProvider_file_path)
                                 with open(dataProvider_file_path) as dataProvider_input_file:
                                         dataProvider_csv_reader = csv.reader(dataProvider_input_file)
 
@@ -57,12 +57,14 @@ def set_collection_list():
 
                                                 #query collections by faceting dataProvider.name
                                                 query_term = {'dataProvider': dataProvider_name}
-                                                query_term['facets'] = 'sourceResource.collection.id'
+                                                query_term['facets'] = 'sourceResource'
+                                                print(dataProvider_name)
                                                 collection_query_response = dpla_utils.dpla_fetch_facets_remote(api_key, **query_term)
-
+                                                print(collection_query_response)
                                                 #process query response
 
                                                 # collection_query_response['sourceResource.collection.id']['terms'] is a list
+                                                '''
                                                 for single_collection_information in collection_query_response['sourceResource.collection.id']['terms']:
                                                         collection_single_row = [provider_information_row[0], dataProvider_name]
                                                         collection_single_row.append(single_collection_information['term'])
@@ -82,6 +84,7 @@ def set_collection_list():
 
                                                 except IOError as output_file_error:
                                                         print("could not write to this output file")
+                                                '''
                                 dataProvider_input_file.close()
                 input_file.close()                              
                         
@@ -102,7 +105,7 @@ def process_provider_list(provider_file):
                         provider_information.append('files/dataProvider/' + provider_information[0] + '.csv')
                         provider_rows.append(provider_information)
         provider_list_input.close()
-
+        #print(provider_rows)
         #re-write the list into file, added dataProvider_file_path
         with open(provider_file, 'w', newline = '') as provider_list_output:
                 provider_writer = csv.writer(provider_list_output, lineterminator='\n')
