@@ -51,10 +51,12 @@ def set_dataProvider_list():
                                         # write dataProvider information into files
                                         with open(folder + current_provider_name + '.csv', 'w') as dataProvider_file:
                                                 
-                                                header = [DATAPROVIDER_HEADER_NAME, DATAPROVIDER_HEADER_COUNT] # put in begining
+                                                header = ['term', 'count'] # put in begining
                                                 dataProvider_csv_writer = csv.DictWriter(dataProvider_file, header)
                                                 dataProvider_csv_writer.writeheader()
                                                 dataProvider_csv_writer.writerows(dataprovider_result_list)
+                                                header = [DATAPROVIDER_HEADER_COUNT, DATAPROVIDER_HEADER_NAME]
+                                                dataProvider_csv_writer.writeheader()
 
                                         dataProvider_file.close();
 
