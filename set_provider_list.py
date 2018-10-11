@@ -21,14 +21,16 @@ def get_providers():
                 provider_list = value['terms'] # type: list
                 # treaverse the list of id and name
                 for index in range(len(provider_list)):
-                        
+
                         sub_facet_response = provider_list[index]
-                        
+
                         length = len(provider_result_list)
                         single_facet_response = {'count': sub_facet_response['count'], key: sub_facet_response['term']}
-                                
+
+                        # question: How many items are contributed by each provider?
+                        print("Provider ", sub_facet_response['term'], " contributes ", sub_facet_response['count'], " items.")
                         provider_result_list.append(single_facet_response)
-                        
+
 
         return provider_result_list
 
@@ -40,10 +42,10 @@ def set_provider_list():
         results = parser.parse_args()
 
         output_file = results.output_file_list[0]
-        
+
         try:
                 provider_list = get_providers()
-                
+
                 with open(output_file, 'w') as provider_file_open:
                         file_header = [DPLA_PROVIDER_HEADER_NAME, DPLA_PROVIDER_HEADER_COUNT]
                         provider_writer = csv.DictWriter(provider_file_open, file_header)
@@ -60,3 +62,4 @@ def main():
         set_provider_list()
 
 main()
+
