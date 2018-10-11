@@ -48,7 +48,7 @@ def send_request(url, payload):
     """
     try:
         response = requests.get(url, params=payload)
-        # print(payload)
+        #print(response.json)
         return response.json()
 
     except requests.exceptions.RequestException:

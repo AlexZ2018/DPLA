@@ -57,7 +57,7 @@ def set_collection_list():
 
                                                 #query collections by faceting dataProvider.name
                                                 query_term = {'dataProvider': dataProvider_name}
-                                                query_term['facets'] = 'sourceResource.subject.@id'
+                                                #query_term['facets'] = 'sourceResource.subject.@id'
                                                 print(dataProvider_name)
                                                 collection_query_response = dpla_utils.dpla_fetch_facets_remote(api_key, **query_term)
                                                 print(collection_query_response)

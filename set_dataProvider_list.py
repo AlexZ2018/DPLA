@@ -45,6 +45,9 @@ def set_dataProvider_list():
                                 dataProvider_query_response = dpla_utils.dpla_fetch_facets_remote(api_key, **query_terms)
 
                                 dataprovider_result_list = dataProvider_query_response['dataProvider']['terms']
+
+                                # Question: How many items are contributed by each dataProvider?
+                                #print("dataProvider ", dataprovider_result_list['term'], " contributes ", dataprovider_result_list['term'], " items.")
                                 dataProvider_count += len(dataprovider_result_list)
 
                                 try:
@@ -52,13 +55,13 @@ def set_dataProvider_list():
                                         current_provider_name = current_provider_name.replace(' ', '_', 256);
                                         # write dataProvider information into files
                                         with open(folder + current_provider_name + '.csv', 'w') as dataProvider_file:
-                                                
+
                                                 header = ['term', 'count'] # put in begining
                                                 dataProvider_csv_writer = csv.DictWriter(dataProvider_file, header)
                                                 dataProvider_csv_writer.writeheader()
                                                 dataProvider_csv_writer.writerows(dataprovider_result_list)
-                                                header = [DATAPROVIDER_HEADER_COUNT, DATAPROVIDER_HEADER_NAME]
-                                                dataProvider_csv_writer.writeheader()
+                                                #header = [DATAPROVIDER_HEADER_COUNT, DATAPROVIDER_HEADER_NAME]
+                                                #dataProvider_csv_writer.writeheader()
 
                                         dataProvider_file.close();
 
@@ -70,7 +73,6 @@ def set_dataProvider_list():
         except IOError as input_file_error:
                 print("couldn`t read the input file ")
 
-#set_dataProvider_list() # main funciton # close csv
 def main():
         set_dataProvider_list()
 
