@@ -1,6 +1,10 @@
 '''
 supplementary.py
 there should be 2 inputs, provider list, collection list
+
+Answered Question:
+How many items are contributed by each dataProvider?
+Are there any dataProviders who contribute items to more than one provider?
 '''
 import sys
 import dpla_utils
@@ -44,14 +48,11 @@ def supplementary():
 					#skip the header
 					skip_header = next(dataProvider_csv_reader, None)
 
-					print("skip_header::   ", skip_header)
 					# traverse each dataProvider list
 					for dataProvider_information_row in dataProvider_csv_reader:
 						current_dataProvider_name = dataProvider_information_row[0]
-						print(current_dataProvider_name)
 						#if repeated
 						if current_dataProvider_name in dataProvider_list:
-							print(current_dataProvider_name)
 							if not current_dataProvider_name in repeated_dataProvider_list:
 								repeated_dataProvider_list.append(current_dataProvider_name)
 						# if not repeated
@@ -87,7 +88,7 @@ def process_provider_list(provider_file):
                         provider_information.append('files/dataProvider/' + provider_information[0] + '.csv')
                         provider_rows.append(provider_information)
         provider_list_input.close()
-        #print(provider_rows)
+
         #re-write the list into file, added dataProvider_file_path
         with open(provider_file, 'w', newline = '') as provider_list_output:
                 provider_writer = csv.writer(provider_list_output, lineterminator='\n')
@@ -96,3 +97,4 @@ def process_provider_list(provider_file):
                 provider_writer.writerows(provider_rows)
 
 supplementary()
+
