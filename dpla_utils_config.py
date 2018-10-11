@@ -1,5 +1,5 @@
-COLLECTIONS_URL = 'http://api.dp.la/v2/collections'
-ITEMS_URL = 'http://api.dp.la/v2/items'
+COLLECTIONS_URL = 'https://api.dp.la/v2/collections'
+ITEMS_URL = 'https://api.dp.la/v2/items'
 
 ES_INDEX = 'dpla-test-2'
 ES_HOST = 'http://tahoe.ischool.utexas.edu'

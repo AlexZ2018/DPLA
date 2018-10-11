@@ -41,7 +41,7 @@ def set_collection_list():
 
                                 print("Calm down and keep patient... Process: ",  int(len(collections_result_list)/ 65), " %")
                                 #print(provider_information_row)
-                                dataProvider_file_path = provider_information_row[2]# 2 or 3???
+                                dataProvider_file_path = provider_information_row[2]
 
                                 #open dataProvider file
                                 print(dataProvider_file_path)
@@ -56,11 +56,16 @@ def set_collection_list():
                                                 dataProvider_name = dataProvider_information_row[0] 
 
                                                 #query collections by faceting dataProvider.name
-                                                query_term = {'dataProvider': dataProvider_name}
+                                                query_term = {'dataProvider': dataProvider_name}#dataProvider_name
                                                 #query_term['facets'] = 'sourceResource.subject.@id'
+                                                query_term['fields'] = 'sourceResource.collection,@id'
+                                                query_term['page_size'] = 1000
                                                 print(dataProvider_name)
-                                                collection_query_response = dpla_utils.dpla_fetch_facets_remote(api_key, **query_term)
-                                                print(collection_query_response)
+                                                collection_query_response = dpla_utils.dpla_fetch_remote(api_key, **query_term)
+                                                #print(collection_query_response)
+                                                for row in collection_query_response:
+                                                        if len(row) > 2:
+                                                                print(row)
                                                 #process query response
 
                                                 # collection_query_response['sourceResource.collection.id']['terms'] is a list
