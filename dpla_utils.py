@@ -164,7 +164,7 @@ def dpla_fetch_remote(api_key, search_type='items', **kwargs):
     if count == 0:
         response = send_request(url, payload)
         count = response.get('count')
-        # print("Total result: %s" % count)
+        print("Total result: %s" % count)
     #print("count: " + count)
     #print("page_size: " + page_size)
     final_page_size = count % page_size
