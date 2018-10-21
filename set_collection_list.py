@@ -12,6 +12,7 @@ import argparse
 PROVIDER_HEADER_PROVIDER_NAME = 'provider.name' 
 PROVIDER_HEADER_ITEMS_COUNT = 'count_of_items'
 PROVIDER_HEADER_DATAPROVIDER_PATH = 'dataProvider_file_path'
+invalid_dataProvider_list = ['C']
 
 def set_collection_list():
         api_key = dpla_config.API_KEY
@@ -29,6 +30,7 @@ def set_collection_list():
         try:
                 # process_provider_list, add dataProvider_list_path
                 process_provider_list(input_file)
+                entire_collection_list = []
 
                 #open input file, traverse it, and get each dataProvider list path
                 with open(input_file) as input_file:
@@ -39,8 +41,8 @@ def set_collection_list():
                         collections_result_list = []
                         for provider_information_row in provider_csv_reader:
 
-                                print("Calm down and keep patient... Process: ",  int(len(collections_result_list)/ 65), " %")
-                                #print(provider_information_row)
+                                print("Calm down and keep patient... Process: ",  int(len(entire_collection_list)/ 65), " %")
+                                #print(provider_information_row[0])
                                 dataProvider_file_path = provider_information_row[2]
 
                                 #open dataProvider file
@@ -59,14 +61,19 @@ def set_collection_list():
                                                 collection_list = [] #record collection.title, collection.id, count
                                                 #print(dataProvider_information_row[0] )
                                                 dataProvider_name = dataProvider_information_row[0] 
-
+                                                
+                                                if dataProvider_name in invalid_dataProvider_list:
+                                                        continue
+                                                dataProvider_name = process_dataProvider_name(dataProvider_name)
                                                 #query collections by faceting dataProvider.name
-                                                query_term = {'dataProvider': 'Lewis and Clark County'}#dataProvider_name
+                                                query_term = {'dataProvider': dataProvider_name}#dataProvider_name
                                                 #query_term['facets'] = 'sourceResource.subject.@id'
                                                 query_term['fields'] = 'sourceResource.collection,@id'
                                                 query_term['count'] = 10 # need to be larger
+                                                print(provider_information_row[0])
                                                 print(dataProvider_name)
                                                 collection_query_response = dpla_utils.dpla_fetch_remote(api_key, **query_term)
+                                                #print(' here is the response ::::::::::::')
                                                 #print(collection_query_response)
                                                 for index in range(len(collection_query_response)):
                                                         #if current item belongs to no collection
@@ -92,7 +99,7 @@ def set_collection_list():
                                                                         for collection_index in range(len(collection_list)):
                                                                                 current_collection_entry = collection_list[collection_index]
                                                                                 #print('current_collection_entry[collection.title] is ', current_collection_entry['collection.title'])
-                                                                                if (('title' in current_collection) and (current_collection['title'] == current_collection_entry['collection.title'])) or (('id' in current_collection) and (current_collection['id'] == current_collection_entry['id'])):
+                                                                                if (('title' in current_collection) and (current_collection['title'] == current_collection_entry['collection.title'])) or (('id' in current_collection) and (current_collection['id'] == current_collection_entry['collection.id'])):
                                                                                         # run this when current collection already exists
                                                                                         collection_list[collection_index]['count'] = collection_list[collection_index]['count'] + 1
                                                                                         collection_already_exist = True;
@@ -101,48 +108,44 @@ def set_collection_list():
                                                                         # we really need a new collection entry!!
                                                                         #print(" going to enter new collection creation")
                                                                         if collection_already_exist == False:
-                                                                                print(" going to enter new collection creation")
+                                                                                #print(" going to enter new collection creation")
                                                                                 #initialize
-                                                                                new_collection_entry = {'collection.title': None, 'collection.id': None, 'count': 1}
+                                                                                new_collection_entry = {'collection.title': None, 'collection.id': None, 'count': 1, 'provider.name': provider_information_row[0], 'dataProvider.name': dataProvider_name}
                                                                                 #new_collection_entry['collection.id'] = None
                                                                                 #new_collection_entry['count'] = 1;
                                                                                 if 'title' in current_collection:
                                                                                         new_collection_entry['collection.title'] = current_collection['title']
                                                                                 if 'id' in current_collection:
                                                                                         new_collection_entry['collection.id'] = current_collection['id']
-                                                                                print(" this is new collection entry ::::::::::::::::::::::::::::::")
-                                                                                print(new_collection_entry)
+                                                                                #print(" this is new collection entry ::::::::::::::::::::::::::::::")
+                                                                                #print(new_collection_entry)
                                                                                 collection_list.append(new_collection_entry)
                                                 print(" This is collection list : : : : : : : : : \n")
                                                 print(collection_list)
+                                                print(" count items with no collection :::::", item_belongs_to_no_collection_count)
 
-
+                                                entire_collection_list.append(collection_list)
 
                                                 #process query response
 
                                                 # collection_query_response['sourceResource.collection.id']['terms'] is a list
+                                dataProvider_input_file.close()               
+                        '''
+                        try:
+                                #write collection information into files
+                                with open(output_file, 'w') as collection_file:
+                                        collection_file_writer = csv.writer(collection_file)
+                                        collection_file_writer.writerow(['provider.name', 'dataProvider.name', 'collection.id', 'collection.title', 'count'])
+                                        #collection_file_writer.writerows(collections_result_list)
+                                        for index in range(len(entire_collection_list)):
+                                                collection_file_writer.writerows(entire_collection_list[index])
+
+                                collection_file.close()
+
+                        except IOError as output_file_error:
+                                print("could not write to this output file")
                                                 '''
-                                                for single_collection_information in collection_query_response['sourceResource.collection.id']['terms']:
-                                                        collection_single_row = [provider_information_row[0], dataProvider_name]
-                                                        collection_single_row.append(single_collection_information['term'])
-                                                        collection_single_row.append(single_collection_information['count'])
-
-                                                        #print(collection_single_row)
-                                                        collections_result_list.append(collection_single_row)
-
-                                                try:
-                                                        #write collection information into files
-                                                        with open(output_file, 'w') as collection_file:
-                                                                collection_file_writer = csv.writer(collection_file)
-                                                                collection_file_writer.writerow(['provider.name', 'dataProvider.name', 'collection.id', 'count_of_items'])
-                                                                collection_file_writer.writerows(collections_result_list)
-
-                                                        collection_file.close()
-
-                                                except IOError as output_file_error:
-                                                        print("could not write to this output file")
-                                                '''
-                                dataProvider_input_file.close()
+                                #dataProvider_input_file.close()
                 input_file.close()                              
                         
         except IOError as input_file_error:
@@ -173,6 +176,17 @@ def process_provider_list(provider_file):
                 provider_writer.writerow([PROVIDER_HEADER_PROVIDER_NAME, PROVIDER_HEADER_ITEMS_COUNT, PROVIDER_HEADER_DATAPROVIDER_PATH])
                 provider_writer.writerows(provider_rows)
       
+def process_dataProvider_name(dataProvider_name):
+        if "[" in dataProvider_name:
+                dataProvider_name = dataProvider_name.replace("[", "\[")
+
+        if "]" in dataProvider_name:
+                dataProvider_name = dataProvider_name.replace("]", "\]")
+
+        if "/" in dataProvider_name:
+                dataProvider_name = dataProvider_name.replace("/", "\/")
+
+        return dataProvider_name
       
 def main():
         set_collection_list()
