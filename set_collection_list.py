@@ -31,6 +31,7 @@ def set_collection_list():
                 # process_provider_list, add dataProvider_list_path
                 process_provider_list(input_file)
                 entire_collection_list = []
+                collection_count = 0
 
                 #open input file, traverse it, and get each dataProvider list path
                 with open(input_file) as input_file:
@@ -41,12 +42,12 @@ def set_collection_list():
                         collections_result_list = []
                         for provider_information_row in provider_csv_reader:
 
-                                print("Calm down and keep patient... Process: ",  int(len(entire_collection_list)/ 65), " %")
+                                print("*************  Calm down and keep patient... Process: ",  int(collection_count/ 365), " %     *******************")
                                 #print(provider_information_row[0])
                                 dataProvider_file_path = provider_information_row[2]
 
                                 #open dataProvider file
-                                print(dataProvider_file_path)
+                                #print(dataProvider_file_path)
                                 with open(dataProvider_file_path) as dataProvider_input_file:
                                         dataProvider_csv_reader = csv.reader(dataProvider_input_file)
 
@@ -70,8 +71,8 @@ def set_collection_list():
                                                 #query_term['facets'] = 'sourceResource.subject.@id'
                                                 query_term['fields'] = 'sourceResource.collection,@id'
                                                 query_term['count'] = 10 # need to be larger
-                                                print(provider_information_row[0])
-                                                print(dataProvider_name)
+                                                #print(provider_information_row[0])
+                                                #print(dataProvider_name)
                                                 collection_query_response = dpla_utils.dpla_fetch_remote(api_key, **query_term)
                                                 #print(' here is the response ::::::::::::')
                                                 #print(collection_query_response)
@@ -119,32 +120,38 @@ def set_collection_list():
                                                                                         new_collection_entry['collection.id'] = current_collection['id']
                                                                                 #print(" this is new collection entry ::::::::::::::::::::::::::::::")
                                                                                 #print(new_collection_entry)
-                                                                                collection_list.append(new_collection_entry)
-                                                print(" This is collection list : : : : : : : : : \n")
-                                                print(collection_list)
-                                                print(" count items with no collection :::::", item_belongs_to_no_collection_count)
-
+                                                                                if not (new_collection_entry['collection.title'] is None) and (new_collection_entry['collection.id'] is None):
+                                                                                        collection_list.append(new_collection_entry)
+                                                #print(" This is collection list : : : : : : : : : \n")
+                                                #print(collection_list)
+                                                print(dataProvider_name, " contributes items with no collection :::::", item_belongs_to_no_collection_count)
+                                                collection_count = collection_count + len(collection_list)
                                                 entire_collection_list.append(collection_list)
 
                                                 #process query response
 
                                                 # collection_query_response['sourceResource.collection.id']['terms'] is a list
                                 dataProvider_input_file.close()               
-                        '''
+                        
                         try:
                                 #write collection information into files
                                 with open(output_file, 'w') as collection_file:
                                         collection_file_writer = csv.writer(collection_file)
-                                        collection_file_writer.writerow(['provider.name', 'dataProvider.name', 'collection.id', 'collection.title', 'count'])
+                                        header = ['provider.name', 'dataProvider.name', 'collection.id', 'collection.title', 'count']
+                                        collection_file_writer.writerow(header)
+                                        collection_csv_writer = csv.DictWriter(collection_file, header)
                                         #collection_file_writer.writerows(collections_result_list)
                                         for index in range(len(entire_collection_list)):
-                                                collection_file_writer.writerows(entire_collection_list[index])
+                                                if len(entire_collection_list[index]) == 0:
+                                                        continue
+                                                print("current list :::::::::::::::::::", entire_collection_list[index])
+                                                collection_csv_writer.writerows(entire_collection_list[index])
 
                                 collection_file.close()
 
                         except IOError as output_file_error:
                                 print("could not write to this output file")
-                                                '''
+                                                
                                 #dataProvider_input_file.close()
                 input_file.close()                              
                         
