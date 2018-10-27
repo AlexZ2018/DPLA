@@ -2,6 +2,7 @@
 set_collection_list.py
 with input: files/provider_list.csv
 with output: files/collection_list.csv
+with output: files/item_belongs_to_no_collection_list.csv
 '''
 import sys
 import dpla_utils
@@ -21,7 +22,6 @@ invalid_dataProvider_list = ['C']
 
 def set_collection_list():
         api_key = dpla_config.API_KEY
-
 
         #read input output files
         parser = argparse.ArgumentParser()
@@ -55,7 +55,6 @@ def set_collection_list():
                                 dataProvider_file_path = provider_information_row[2]
 
                                 #open dataProvider file
-                                #print(dataProvider_file_path)
                                 with open(dataProvider_file_path) as dataProvider_input_file:
                                         dataProvider_csv_reader = csv.reader(dataProvider_input_file)
 
@@ -68,8 +67,8 @@ def set_collection_list():
                                                 item_belongs_to_no_collection_count = 0
                                                 item_belongs_to_multi_collections_list = []
                                                 collection_list = [] #record collection.title, collection.id, count
-                                                print(provider_information_row[0])
-                                                print(dataProvider_information_row[0] )
+                                                #print(provider_information_row[0])
+                                                #print(dataProvider_information_row[0] )
                                                 dataProvider_name = dataProvider_information_row[0] 
                                                 
                                                 if dataProvider_name in invalid_dataProvider_list:
@@ -80,11 +79,7 @@ def set_collection_list():
                                                 #query_term['facets'] = 'sourceResource.subject.@id'
                                                 query_term['fields'] = 'sourceResource.collection,@id'
                                                 query_term['count'] = 10 # need to be larger
-                                                #print(provider_information_row[0])
-                                                #print(dataProvider_name)
                                                 collection_query_response = dpla_utils.dpla_fetch_remote(api_key, **query_term)
-                                                #print(' here is the response ::::::::::::')
-                                                #print(collection_query_response)
                                                 for index in range(len(collection_query_response)):
                                                         #if current item belongs to no collection
                                                         if not 'sourceResource.collection' in collection_query_response[index]:
@@ -130,7 +125,7 @@ def set_collection_list():
                                                                                         collection_list.append(new_collection_entry)
                                                 
                                                 item_belongs_to_no_collection_entry = {COLLECTION_HEADER_PROVIDER_NAME: provider_information_row[0], COLLECTION_HEADER_DATAPROVIDER_NAME: dataProvider_name, COLLECTION_HEADER_COUNT_OF_ITEMS: item_belongs_to_no_collection_count}
-                                                print(dataProvider_name, " <put in a list> contributes items with no collection :::::", item_belongs_to_no_collection_count)
+                                                #print(dataProvider_name, " <put in a list> contributes items with no collection :::::", item_belongs_to_no_collection_count)
                                                 item_belongs_to_no_collection_list.append(item_belongs_to_no_collection_entry)
                                                 collection_count = collection_count + len(collection_list)
                                                 entire_collection_list.append(collection_list)
@@ -149,7 +144,6 @@ def set_collection_list():
                                         for index in range(len(entire_collection_list)):
                                                 if len(entire_collection_list[index]) == 0:
                                                         continue
-                                                #print("current list :::::::::::::::::::", entire_collection_list[index])
                                                 collection_csv_writer.writerows(entire_collection_list[index])
 
                                 collection_file.close()
