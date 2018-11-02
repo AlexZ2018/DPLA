@@ -70,6 +70,7 @@ def set_collection_list():
                                                 #print(provider_information_row[0])
                                                 #print(dataProvider_information_row[0] )
                                                 dataProvider_name = dataProvider_information_row[0] 
+                                                #dataProvider_name = 'Grand Valley State University. University Libraries'
                                                 
                                                 if dataProvider_name in invalid_dataProvider_list:
                                                         continue
@@ -115,24 +116,26 @@ def set_collection_list():
                                                                         if collection_already_exist == False:
                                                                                 #initialize new collection entry
                                                                                 new_collection_entry = {COLLECTION_HEADER_COLLECTION_ID: None, COLLECTION_HEADER_COLLECTION_TITLE: None, COLLECTION_HEADER_COUNT_OF_ITEMS: 1, COLLECTION_HEADER_PROVIDER_NAME: provider_information_row[0], COLLECTION_HEADER_DATAPROVIDER_NAME: dataProvider_name}
-                                                                                
+
                                                                                 if 'title' in current_collection:
                                                                                         new_collection_entry['collection.title'] = current_collection['title']
                                                                                 if 'id' in current_collection:
                                                                                         new_collection_entry['collection.id'] = current_collection['id']
                                                                                 
-                                                                                if not (new_collection_entry['collection.title'] is None) and (new_collection_entry['collection.id'] is None):
-                                                                                        collection_list.append(new_collection_entry)
+                                                                                #if not (new_collection_entry['collection.title'] is None) and (new_collection_entry['collection.id'] is None):
+                                                                                collection_list.append(new_collection_entry)
+
+                                                                                #print(new_collection_entry)
                                                 
                                                 item_belongs_to_no_collection_entry = {COLLECTION_HEADER_PROVIDER_NAME: provider_information_row[0], COLLECTION_HEADER_DATAPROVIDER_NAME: dataProvider_name, COLLECTION_HEADER_COUNT_OF_ITEMS: item_belongs_to_no_collection_count}
                                                 #print(dataProvider_name, " <put in a list> contributes items with no collection :::::", item_belongs_to_no_collection_count)
                                                 item_belongs_to_no_collection_list.append(item_belongs_to_no_collection_entry)
                                                 collection_count = collection_count + len(collection_list)
                                                 entire_collection_list.append(collection_list)
+                                                #print(collection_list)
 
                                                 # collection_query_response['sourceResource.collection.id']['terms'] is a list
-                                dataProvider_input_file.close()               
-                        
+                                dataProvider_input_file.close()         
                         try:
                                 #write collection information into files
                                 with open(output_file, 'w') as collection_file:
@@ -145,6 +148,7 @@ def set_collection_list():
                                                 if len(entire_collection_list[index]) == 0:
                                                         continue
                                                 collection_csv_writer.writerows(entire_collection_list[index])
+                                                #print(entire_collection_list[index])
 
                                 collection_file.close()
 
