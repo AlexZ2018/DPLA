@@ -8,11 +8,12 @@ import csv
 import argparse
 
 DPLA_PROVIDER_HEADER_NAME = 'provider.name'
-DPLA_PROVIDER_HEADER_COUNT = 'count'
+DPLA_PROVIDER_HEADER_COUNT = 'count_of_items'
+DPLA_FACET = 'facets'
 
 def get_providers():
         api_key = dpla_config.API_KEY
-        query_terms = {'facets': 'provider.name'}
+        query_terms = {DPLA_FACET: DPLA_PROVIDER_HEADER_NAME}
         facet_response = dpla_utils.dpla_fetch_facets_remote(api_key,  **query_terms)
         provider_result_list = []
 
@@ -25,7 +26,7 @@ def get_providers():
                         sub_facet_response = provider_list[index]
 
                         length = len(provider_result_list)
-                        single_facet_response = {'count': sub_facet_response['count'], key: sub_facet_response['term']}
+                        single_facet_response = {DPLA_PROVIDER_HEADER_COUNT: sub_facet_response['count'], DPLA_PROVIDER_HEADER_NAME: sub_facet_response['term']}
 
                         # question: How many items are contributed by each provider?
                         print("Provider ", sub_facet_response['term'], " contributes ", sub_facet_response['count'], " items.")
@@ -38,10 +39,10 @@ def set_provider_list():
 
         # Read output file from command line
         parser = argparse.ArgumentParser()
-        parser.add_argument('-o', action='append', dest = 'output_file_list')
+        parser.add_argument('-o', action='append', dest = 'provider_output_file', help = "An output file for providers is needed, the format should be FOLDER_NAME/PROVIDER_FILE_NAME, please make sure FOLDER_NAME is existing")
         results = parser.parse_args()
 
-        output_file = results.output_file_list[0]
+        output_file = results.provider_output_file[0]
 
         try:
                 provider_list = get_providers()
@@ -52,7 +53,7 @@ def set_provider_list():
                         provider_writer.writeheader()
                         provider_writer.writerows(provider_list)
 
-                        print("List of providers has been successfully written to files as provider_list.csv")
+                        print("List of providers has been successfully written to output file")
                         print("The amount of Providers: " + str(len(provider_list)))
         except IOError as e:
                 print("cannot open output file")
@@ -62,4 +63,5 @@ def main():
         set_provider_list()
 
 main()
+
 
